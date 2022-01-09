@@ -118,6 +118,7 @@ class SpaceBox:
         obj.addProperty("App::PropertyBool", "IsHorizontal", "Drawer", "Is The Stack Horizontal?")
         obj.addProperty("App::PropertyLink", "InnerBox", "Drawer", "SpaceBox Dimentions set by Body Part")
         obj.addProperty("App::PropertyLink", "Viewbox", "View", "Box to see the Dimensions of the Spacebox")
+        obj.addProperty("App::PropertyString", "SpaceBox", "info", "Version of the SpaceBox (Proxy)").SpaceBox = "v2"
         obj.addExtension("App::GroupExtensionPython")
 
 
@@ -138,12 +139,28 @@ class SpaceBox:
             lc = LibaryChooser()
             part = lc.load(lc.lib + obj.BoxBodySrc)
             body = obj.Document.copyObject(part[0], True)
+
             # setup obj in libary document
             body.Placement.Base = obj.Placement.Base
 
             for obj2 in body.Group:
                 if obj2.Label.startswith("block"):
                     block = obj2
+            FreeCAD.ActiveDocument.removeObject(block.Settings.Name)
+            settings = None
+            for obj2 in obj.Group:
+                if obj2.Label.startswith("settings"):
+                    settings = obj2
+
+            partblock = None
+            for obj2 in part[1].findObjects():
+                if obj2.Label.startswith("block"):
+                    partblock = obj2
+
+            if not settings:
+                settings = obj.Document.copyObject(partblock.Settings, True)
+
+            block.Settings = settings
 
             block.Height = obj.Height
             block.Length = obj.Length
@@ -151,6 +168,7 @@ class SpaceBox:
 
             obj.BoxBody = body
             obj.addObject(body)
+            obj.addObject(settings)
             recomputebody(body)
 
         for dw in obj.DrawerList:

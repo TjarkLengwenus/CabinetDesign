@@ -1,11 +1,9 @@
 import FreeCADGui
-import FreeCAD
 
 import sys
 from PySide2.QtWidgets import QApplication
 
-import LibaryChooser
-
+#For Debugging
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     FreeCADGui.showMainWindow()

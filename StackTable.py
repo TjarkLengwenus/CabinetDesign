@@ -22,9 +22,8 @@ class StackCommand:
 
         if FreeCADGui.Selection.getCompleteSelection():
             box = FreeCADGui.Selection.getCompleteSelection()[0]
-            if box.TypeId == "App::FeaturePython":
-                if (box.Proxy.Type == 'SpaceBox'):
-                    panel = StackTask(box)
+            if hasattr(box,"SpaceBox"):
+                panel = StackTask(box)
         else:
             print("Select The SpaceBox")
 

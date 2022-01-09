@@ -27,18 +27,20 @@ class AddPart:
             docfile = path + "index.html"
 
             os.mkdir(path)
-            copyfile(FreeCAD.getUserAppDataDir() + "Mod/cabinetbench/Resources/index.html",docfile)
+            copyfile(FreeCAD.getUserAppDataDir() + "Mod/CabinetDesign/Resources/index.html",docfile)
             doc = FreeCAD.newDocument()
 
             part = FreeCAD.activeDocument().addObject('App::Part', text)
 
-            block=FreeCAD.ActiveDocument.addObject("App::FeaturePython","block")#
+            block=FreeCAD.ActiveDocument.addObject("App::FeaturePython","block")
+            settings = FreeCAD.ActiveDocument.addObject("App::FeaturePython","settings")
             part.addObject(block)
 
             #add Propertys
             block.addProperty("App::PropertyLength", "Length", "input", "Length of the Part").Length = "1 m"
             block.addProperty("App::PropertyLength", "Width", "input", "Width of the Part").Width = "1 m"
             block.addProperty("App::PropertyLength", "Height", "input", "Height of the Part").Height = "1 m"
+            block.addProperty("App::PropertyLink","Settings","input","Setting for the Part").Settings = settings
 
             block.addProperty("App::PropertyBool", "UseInnerBox", "output", "Do you Wand to use a InnerBox?").UseInnerBox = False
             block.addProperty("App::PropertyLength", "boxheight", "output", "Height of the InnerBox").boxheight = "1 m"

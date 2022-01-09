@@ -10,11 +10,9 @@ class UpdateParts:
         }
 
     def Activated(self):
-        if FreeCADGui.Selection.getCompleteSelection():
-            box = FreeCADGui.Selection.getCompleteSelection()[0]
-            if box.TypeId == "App::FeaturePython":
-                if (box.Proxy.Type == 'SpaceBox'):
-                    box.Proxy.updatebody(box)
+        for box in FreeCAD.ActiveDocument.findObjects():
+            if hasattr(box,"SpaceBox"):
+                box.Proxy.updatebody(box)
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):
